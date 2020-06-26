@@ -8,6 +8,7 @@ type GraphqlSchema struct {
 	Fields graphql.Fields
 }
 
+//Instance for graphql Schemes
 func NewGraphqlSchema() *GraphqlSchema {
 	schema := &GraphqlSchema{}
 

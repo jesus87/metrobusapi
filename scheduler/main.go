@@ -5,12 +5,13 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/jesus87/apidf/src/application/usecase"
-	"github.com/jesus87/apidf/src/infrastructure/apiintegration/metrobus"
-	"github.com/jesus87/apidf/src/infrastructure/orm/sqlxvendor"
-	"github.com/jesus87/apidf/src/infrastructure/persistance"
+	"github.com/jesus87/metrobusapi/src/application/usecase"
+	"github.com/jesus87/metrobusapi/src/infrastructure/apiintegration/metrobus"
+	"github.com/jesus87/metrobusapi/src/infrastructure/orm/sqlxvendor"
+	"github.com/jesus87/metrobusapi/src/infrastructure/persistance"
 )
 
+//main for scheduler process
 func main() {
 
 	log.Println("Running")

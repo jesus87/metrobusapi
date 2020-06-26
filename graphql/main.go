@@ -8,7 +8,7 @@ import (
 	"github.com/buaazp/fasthttprouter"
 	"github.com/valyala/fasthttp"
 )
-
+//main main of the api, and opens the port for using api on local
 func main() {
 
 	port := os.Getenv("GRAPHQL_PORT")

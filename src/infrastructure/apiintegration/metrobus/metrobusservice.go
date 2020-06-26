@@ -6,13 +6,15 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/jesus87/apidf/src/domain/entity"
+	"github.com/jesus87/metrobusapi/src/domain/entity"
 )
 
+//MetrobusService type for manipulate metrobusservice
 type MetrobusService struct {
 	_url string
 }
 
+//FetchPositions fecht positions from  df api
 func (m *MetrobusService) FetchPositions(pageSize int) ([]*entity.VehiclePosition, error) {
 
 	const queryString = "dataset=prueba_fetchdata_metrobus&q=&rows="
@@ -32,6 +34,7 @@ func (m *MetrobusService) FetchPositions(pageSize int) ([]*entity.VehiclePositio
 	return positions.VehiclePositions, nil
 }
 
+//FetchAlcaldias fecth alcaldias from df api
 func (m *MetrobusService) FetchAlcaldias() ([]*entity.Alcaldia, error) {
 	const queryString = "dataset=alcaldias&q=&facet=nomgeo&facet=cve_mun&facet=municipio"
 	_url := fmt.Sprintf("%v%v", m._url, queryString)
@@ -50,6 +53,7 @@ func (m *MetrobusService) FetchAlcaldias() ([]*entity.Alcaldia, error) {
 	return catalog.Alcaldias, nil
 }
 
+// fetchData method for fetching retriving data from api
 func (m *MetrobusService) fetchData(url string) ([]byte, error) {
 	response, err := http.Get(url)
 	if err != nil {

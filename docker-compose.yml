@@ -47,7 +47,7 @@ services:
   environment:
    - COMPOSE_CONVERT_WINDOWS_PATHS=true
   volumes:
-   - ${GOPATH}\src\github.com\jesus87\apidf\sql:/flyway/sql:rw
+   - ${GOPATH}\src\github.com\jesus87\metrobusapi\sql:/flyway/sql:rw
   networks: 
    - metrobusnetwork
   depends_on:

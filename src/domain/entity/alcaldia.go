@@ -24,6 +24,7 @@ type AlcaldiaCatalog struct {
 	Alcaldias []*Alcaldia `json:"records"`
 }
 
+//GetPolygon get polygon using coordinates
 func (a *Alcaldia) GetPolygon() string {
 	//'POLYGON((-74.13591384887695 40.93750722242824,-74.13522720336914 40.929726129575016))'
 

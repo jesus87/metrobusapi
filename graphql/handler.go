@@ -4,25 +4,28 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/jesus87/apidf/src/application/usecase"
-	"github.com/jesus87/apidf/src/infrastructure/apiintegration/metrobus"
-	"github.com/jesus87/apidf/src/infrastructure/orm/sqlxvendor"
-	"github.com/jesus87/apidf/src/infrastructure/persistance"
+	"github.com/jesus87/metrobusapi/src/application/usecase"
+	"github.com/jesus87/metrobusapi/src/infrastructure/apiintegration/metrobus"
+	"github.com/jesus87/metrobusapi/src/infrastructure/orm/sqlxvendor"
+	"github.com/jesus87/metrobusapi/src/infrastructure/persistance"
 	"github.com/valyala/fasthttp"
 
 	"context"
 	"net/http"
 )
 
+// Type for handling graphql
 type GraphqlHandler struct {
 }
 
+// Type request for graphql operations
 type RequestOptions struct {
 	Query         string                 `json:"query" url:"query" schema:"query"`
 	Variables     map[string]interface{} `json:"variables" url:"variables" schema:"variables"`
 	OperationName string                 `json:"operationName" url:"operationName" schema:"operationName"`
 }
 
+// get query, variables and operations from incoming Requests
 func getFromArgs(values *fasthttp.Args) *RequestOptions {
 	query := values.Peek("query")
 	if query != nil {
@@ -82,6 +85,7 @@ func (c *GraphqlHandler) ContextHandler(ctx context.Context, ctxreq *fasthttp.Re
 	ctxreq.Response.AppendBody(buff)
 }
 
+//getAvailableVehicles list the available vehicles
 func getAvailableVehicles() ([]byte, error) {
 	metrobusservice := metrobus.NewMetrobusService(os.Getenv("METROBUS_API_URL"))
 
@@ -99,6 +103,8 @@ func getAvailableVehicles() ([]byte, error) {
 
 	return buff, nil
 }
+
+//getPositionHistory get values for historical positions
 func getPositionHistory(vehicleID int) ([]byte, error) {
 	metrobusservice := metrobus.NewMetrobusService(os.Getenv("METROBUS_API_URL"))
 
@@ -117,6 +123,8 @@ func getPositionHistory(vehicleID int) ([]byte, error) {
 
 	return buff, nil
 }
+
+//getAlcaldias get list of alcadias in CDMX
 func getAlcaldias() ([]byte, error) {
 	metrobusservice := metrobus.NewMetrobusService(os.Getenv("METROBUS_API_URL"))
 
@@ -135,11 +143,11 @@ func getAlcaldias() ([]byte, error) {
 
 	return buff, nil
 }
-
+//Handle handler for incoming request using graphql
 func (c *GraphqlHandler) Handle(ctx *fasthttp.RequestCtx) {
 	c.ContextHandler(context.Background(), ctx)
 }
-
+//NewGraphqlHandler instance for graphql handler
 func NewGraphqlHandler() *GraphqlHandler {
 	return &GraphqlHandler{}
 }

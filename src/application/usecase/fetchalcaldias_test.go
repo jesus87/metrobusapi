@@ -3,9 +3,9 @@ package usecase
 import (
 	"testing"
 
-	"github.com/jesus87/apidf/src/infrastructure/apiintegration/metrobus"
-	"github.com/jesus87/apidf/src/infrastructure/orm/sqlxvendor"
-	"github.com/jesus87/apidf/src/infrastructure/persistance"
+	"github.com/jesus87/metrobusapi/src/infrastructure/apiintegration/metrobus"
+	"github.com/jesus87/metrobusapi/src/infrastructure/orm/sqlxvendor"
+	"github.com/jesus87/metrobusapi/src/infrastructure/persistance"
 )
 
 func TestFetchAlcaldiasSuccess(t *testing.T) {

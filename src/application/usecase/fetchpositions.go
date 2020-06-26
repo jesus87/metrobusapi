@@ -3,17 +3,19 @@ package usecase
 import (
 	"log"
 
-	"github.com/jesus87/apidf/src/domain/entity"
-	"github.com/jesus87/apidf/src/infrastructure/apiintegration/metrobus"
-	"github.com/jesus87/apidf/src/infrastructure/persistance"
+	"github.com/jesus87/metrobusapi/src/domain/entity"
+	"github.com/jesus87/metrobusapi/src/infrastructure/apiintegration/metrobus"
+	"github.com/jesus87/metrobusapi/src/infrastructure/persistance"
 )
 
+//FetchPositionsUseCase type for fetching positions
 type FetchPositionsUseCase struct {
 	_metrobusService    *metrobus.MetrobusService
 	_metrobusRepository *persistance.MetrobusRepository
 	_pageSize           int
 }
 
+//Fetch method for fetching positions
 func (u *FetchPositionsUseCase) Fetch() error {
 
 	positions, err := u._metrobusService.FetchPositions(u._pageSize)
@@ -52,14 +54,17 @@ func (u *FetchPositionsUseCase) Fetch() error {
 	return nil
 }
 
+//GetVehicles get vehicles from repoository
 func (u *FetchPositionsUseCase) GetVehicles() ([]entity.Vehicle, error) {
 	return u._metrobusRepository.GetVehicles()
 }
 
+//GetVehiclePositions get positions for vehicles from repository
 func (u *FetchPositionsUseCase) GetVehiclePositions(vehicleID int) ([]entity.VehiclePosition, error) {
 	return u._metrobusRepository.GetPositions(vehicleID)
 }
 
+//NewFetchPositionsUseCase instance for type fetchpositions
 func NewFetchPositionsUseCase(
 	metrobusService *metrobus.MetrobusService,
 	metrobusRepository *persistance.MetrobusRepository,

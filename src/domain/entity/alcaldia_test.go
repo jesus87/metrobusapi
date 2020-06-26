@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jesus87/apidf/src/domain/entity"
+	"github.com/jesus87/metrobusapi/src/domain/entity"
 )
 
 func TestGetPolygon(t *testing.T) {

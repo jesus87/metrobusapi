@@ -1,4 +1,4 @@
-module github.com/jesus87/apidf
+module github.com/jesus87/metrobusapi
 
 go 1.14
 

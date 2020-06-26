@@ -2,10 +2,11 @@ package sqlxvendor
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jesus87/apidf/src/infrastructure/orm"
+	"github.com/jesus87/metrobusapi/src/infrastructure/orm"
 	"github.com/jmoiron/sqlx"
 )
 
+//SqlxVendor type for persist database
 type SqlxVendor struct {
 	_engine           string
 	_connectionString string
@@ -13,6 +14,7 @@ type SqlxVendor struct {
 
 var _ orm.OrmManager = (*SqlxVendor)(nil)
 
+//HandleConnection handler for openning connections
 func (vendor *SqlxVendor) HandleConnection() (*sqlx.DB, error) {
 	db, err := sqlx.Connect(vendor._engine, vendor._connectionString)
 	if err != nil {
@@ -22,6 +24,7 @@ func (vendor *SqlxVendor) HandleConnection() (*sqlx.DB, error) {
 	return db, nil
 }
 
+//Select method for select information
 func (vendor *SqlxVendor) Select(dest interface{}, query string, arg interface{}) error {
 	db, err := vendor.HandleConnection()
 	if err != nil {
@@ -40,6 +43,7 @@ func (vendor *SqlxVendor) Select(dest interface{}, query string, arg interface{}
 	return nil
 }
 
+//Save method for saving information on database
 func (vendor *SqlxVendor) Save(query string, arg interface{}) error {
 	db, err := vendor.HandleConnection()
 	if err != nil {
@@ -52,7 +56,7 @@ func (vendor *SqlxVendor) Save(query string, arg interface{}) error {
 
 	return nil
 }
-
+//NewSqlxVendor instance for sql type
 func NewSqlxVendor(engine string, connectionString string) *SqlxVendor {
 
 	return &SqlxVendor{
