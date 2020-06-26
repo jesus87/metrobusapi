@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"strconv"
 
 	"github.com/jesus87/metrobusapi/src/application/usecase"
 	"github.com/jesus87/metrobusapi/src/infrastructure/apiintegration/metrobus"
@@ -14,18 +15,17 @@ import (
 	"net/http"
 )
 
-// Type for handling graphql
 type GraphqlHandler struct {
 }
 
-// Type request for graphql operations
+//RequestOptions type for request option for getting query, vars and operations
 type RequestOptions struct {
 	Query         string                 `json:"query" url:"query" schema:"query"`
 	Variables     map[string]interface{} `json:"variables" url:"variables" schema:"variables"`
 	OperationName string                 `json:"operationName" url:"operationName" schema:"operationName"`
 }
 
-// get query, variables and operations from incoming Requests
+//getFromArgs get values from args
 func getFromArgs(values *fasthttp.Args) *RequestOptions {
 	query := values.Peek("query")
 	if query != nil {
@@ -85,13 +85,17 @@ func (c *GraphqlHandler) ContextHandler(ctx context.Context, ctxreq *fasthttp.Re
 	ctxreq.Response.AppendBody(buff)
 }
 
-//getAvailableVehicles list the available vehicles
+//getAvailableVehicles list vehicles
 func getAvailableVehicles() ([]byte, error) {
+	pageSize, err := strconv.Atoi(os.Getenv("POSITIONS_API_PAGESIZE"))
+	if err != nil {
+		pageSize = 10
+	}
 	metrobusservice := metrobus.NewMetrobusService(os.Getenv("METROBUS_API_URL"))
 
 	orm := sqlxvendor.NewSqlxVendor(os.Getenv("DB_CONTROLLER"), os.Getenv("CONNECTION_STRING"))
 	repository := persistance.NewMetrobusRepository(orm)
-	useCase := usecase.NewFetchPositionsUseCase(metrobusservice, repository)
+	useCase := usecase.NewFetchPositionsUseCase(metrobusservice, repository, pageSize)
 	vehicles, err := useCase.GetVehicles()
 	if err != nil {
 		return nil, err
@@ -104,14 +108,18 @@ func getAvailableVehicles() ([]byte, error) {
 	return buff, nil
 }
 
-//getPositionHistory get values for historical positions
+//getPositionHistory get historical positions
 func getPositionHistory(vehicleID int) ([]byte, error) {
+	pageSize, err := strconv.Atoi(os.Getenv("POSITIONS_API_PAGESIZE"))
+	if err != nil {
+		pageSize = 10
+	}
 	metrobusservice := metrobus.NewMetrobusService(os.Getenv("METROBUS_API_URL"))
 
 	orm := sqlxvendor.NewSqlxVendor(os.Getenv("DB_CONTROLLER"), os.Getenv("CONNECTION_STRING"))
 	repository := persistance.NewMetrobusRepository(orm)
 
-	useCase := usecase.NewFetchPositionsUseCase(metrobusservice, repository)
+	useCase := usecase.NewFetchPositionsUseCase(metrobusservice, repository, pageSize)
 	vehicles, err := useCase.GetVehiclePositions(vehicleID)
 	if err != nil {
 		return nil, err
@@ -124,7 +132,7 @@ func getPositionHistory(vehicleID int) ([]byte, error) {
 	return buff, nil
 }
 
-//getAlcaldias get list of alcadias in CDMX
+//getAlcaldias list alcaldias
 func getAlcaldias() ([]byte, error) {
 	metrobusservice := metrobus.NewMetrobusService(os.Getenv("METROBUS_API_URL"))
 
@@ -143,11 +151,11 @@ func getAlcaldias() ([]byte, error) {
 
 	return buff, nil
 }
-//Handle handler for incoming request using graphql
+//Handle handle incoming request
 func (c *GraphqlHandler) Handle(ctx *fasthttp.RequestCtx) {
 	c.ContextHandler(context.Background(), ctx)
 }
-//NewGraphqlHandler instance for graphql handler
+//NewGraphqlHandler instance
 func NewGraphqlHandler() *GraphqlHandler {
 	return &GraphqlHandler{}
 }

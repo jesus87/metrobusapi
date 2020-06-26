@@ -17,6 +17,8 @@ Following Global enviroment variables should be defined in order to execute the 
 
 ## SCHEDULE SERVICE
 
+Runs every 15 minutes
+
 Polling metrobus information from source:
 * Alcaldias Catalog
 * Vehicles position history
@@ -26,10 +28,10 @@ Polling metrobus information from source:
 |Enviroment Variable| Description|
 |----|----|
 |SCHEDULER_NAME| Container and build file names|
-|SCHEDULER_TIME| Execution interval|
-|SCHEDULER_ATTEMPTS| Max execution attempts in case of failure|
 |METROBUS_API_URL| CDMX Api Url |
 |POSITIONS_API_PAGESIZE|Page Size for vehicles positions history|
+|DB_CONTROLLER|Database engine|
+|CONNECTION_STRING|Database connection string|
 
 ## GRAPHQL API
 
@@ -46,6 +48,9 @@ GraphQL Api for querying metrobus information as:
 |APINAME| Container and build file names|
 |GRAPHQL_PORT| Access port for Graphql Api|
 |METROBUS_API_URL| CDMX Api Url |
+|POSITIONS_API_PAGESIZE|Page Size for vehicles positions history|
+|DB_CONTROLLER|Database engine|
+|CONNECTION_STRING|Database connection string|
 
 Previous requirements are defined on run.sh script.
 

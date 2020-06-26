@@ -11,7 +11,7 @@ import (
 	"github.com/jesus87/metrobusapi/src/infrastructure/persistance"
 )
 
-//main for scheduler process
+//main main for scheduler
 func main() {
 
 	log.Println("Running")
@@ -22,7 +22,7 @@ func main() {
 	}
 	metrobusservice := metrobus.NewMetrobusService(url)
 
-	orm := sqlxvendor.NewSqlxVendor("mysql", "root:P@ssw0rd@/metrobusdb?parseTime=true")
+	orm := sqlxvendor.NewSqlxVendor(os.Getenv("DB_CONTROLLER"), os.Getenv("CONNECTION_STRING"))
 	repository := persistance.NewMetrobusRepository(orm)
 
 	FetchAlcaldias := usecase.NewFetchAlcaldiasUseCase(metrobusservice, repository)

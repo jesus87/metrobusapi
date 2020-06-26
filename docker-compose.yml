@@ -30,8 +30,9 @@ services:
   restart: on-failure
   environment:
    - METROBUS_API_URL=https://datos.cdmx.gob.mx/api/records/1.0/search/?
-   - DB_CONTROLLER=mysql
-   - CONNECTION_STRING=root:P@ssw0rd@/metrobusdb?parseTime=true
+   - POSITIONS_API_PAGESIZE=${POSITIONS_API_PAGESIZE}
+   - DB_CONTROLLER=${DB_CONTROLLER}
+   - CONNECTION_STRING=${CONNECTION_STRING}
   networks:
    - metrobusnetwork
   ports:
@@ -60,11 +61,12 @@ services:
   restart: always
   environment:
    - METROBUS_API_URL=${METROBUS_API_URL}
+   - POSITIONS_API_PAGESIZE=${POSITIONS_API_PAGESIZE}
+   - DB_CONTROLLER=${DB_CONTROLLER}
+   - CONNECTION_STRING=${CONNECTION_STRING}
   networks:
    - metrobusnetwork
   depends_on:
    - metrobusflyway
    - metrobusdb
    - metrobusgraphql
-  
-

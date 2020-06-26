@@ -8,6 +8,8 @@ export GO111MODULE=on
 export GRAPHQL_PORT=8199
 export METROBUS_API_URL="https://datos.cdmx.gob.mx/api/records/1.0/search/?"
 export POSITIONS_API_PAGESIZE=10
+export DB_CONTROLLER="mysql"
+export CONNECTION_STRING="root:P@ssw0rd@tcp(metrobusdb-mysql:3306)/metrobusdb?parseTime=true"
 
 echo Step 1/12 : Shuting down enviroment
 docker-compose down
