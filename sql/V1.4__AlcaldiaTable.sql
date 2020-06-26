@@ -1,0 +1,1 @@
+ALTER TABLE metrobusdb.alcaldia ADD COLUMN poligono POLYGON

@@ -1,0 +1,70 @@
+version: '3'
+
+volumes:
+ my-db:
+
+networks:
+ metrobusnetwork:
+
+services:
+ metrobusdb:
+  image: mysql
+  container_name: metrobusdb-mysql
+  environment:
+   - MYSQL_ROOT_PASSWORD=P@ssw0rd
+  command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  networks:
+   - metrobusnetwork
+  ports:
+   - 3306:3306
+  volumes:
+   - my-db:/var/lib/mysql
+  healthcheck:
+   test: mysql -e "SHOW VARIABLES" -u root >/dev/null 2>&1;
+   timeout: 20s
+   retries: 10
+
+ metrobusgraphql:
+  image: ${NAMESPACE}/${APINAME}:${VERSION}
+  container_name: ${APINAME}
+  restart: on-failure
+  environment:
+   - METROBUS_API_URL=https://datos.cdmx.gob.mx/api/records/1.0/search/?
+   - DB_CONTROLLER=mysql
+   - CONNECTION_STRING=root:P@ssw0rd@/metrobusdb?parseTime=true
+  networks:
+   - metrobusnetwork
+  ports:
+   - ${GRAPHQL_PORT}:${GRAPHQL_PORT}
+  depends_on:
+   - metrobusdb
+
+ metrobusflyway:
+  image: flyway/flyway
+  container_name: metrobusflyway
+  command: -url=jdbc:mysql://metrobusdb -schemas=metrobusdb -user=root -password=P@ssw0rd -connectRetries=3600 migrate
+  restart: on-failure
+  environment:
+   - COMPOSE_CONVERT_WINDOWS_PATHS=true
+  volumes:
+   - ${GOPATH}\src\github.com\jesus87\apidf\sql:/flyway/sql:rw
+  networks: 
+   - metrobusnetwork
+  depends_on:
+   - metrobusdb
+   - metrobusgraphql
+
+ metrobusscheduler:
+  image: ${NAMESPACE}/${SCHEDULER_NAME}:${VERSION}
+  container_name: ${SCHEDULER_NAME}
+  restart: always
+  environment:
+   - METROBUS_API_URL=${METROBUS_API_URL}
+  networks:
+   - metrobusnetwork
+  depends_on:
+   - metrobusflyway
+   - metrobusdb
+   - metrobusgraphql
+  
+
